@@ -164,13 +164,13 @@ const ActivityRendererPrototype = {
     const gantt = this.paletteHandler;
     this.defaultSetBackground = this.setBackground;
     this.drawDefaultContentSet = this.drawDefaultContent;
-    this.ganttLoadListener = (e) => {
+    
+    const setupContent = () => {
       if (gantt.isResourceGantt()) {
         this.drawDefaultContent = this.drawNoDisplayOverflowContent;
         this.setBackground = this.defaultSetBackground;
         this.drawDefaultContent = this.drawDefaultContentSet;
       } else {
-        // TODO Don't put a setter in a get...
         this.setBackground = function setBackground(shapeElt, bg) {
           if (Gantt.utils.hasClass(shapeElt, 'parent-activity')) {
             shapeElt.querySelectorAll('.activity-limit').forEach((elt) => {
@@ -187,6 +187,13 @@ const ActivityRendererPrototype = {
         };
         this.drawDefaultContent = this.drawRightContent;
       }
+    };
+
+    // Run immediately to handle already-loaded data models
+    setupContent();
+
+    this.ganttLoadListener = (e) => {
+      setupContent();
     };
     gantt.on(Gantt.events.DATA_LOADED, this.ganttLoadListener);
   },

@@ -3,6 +3,7 @@ import { getComponent } from '../core/component-factory';
 import DragDrop from '../core/dragdrop';
 import ActivityRendererPrototype from './activityrenderer';
 import RowRendererPrototype from './rowrenderer';
+import '../constraintgraph';
 
 import {
   DECORATION_BREAK_CLASS,
