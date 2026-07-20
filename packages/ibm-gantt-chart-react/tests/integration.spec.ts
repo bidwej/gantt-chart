@@ -47,8 +47,8 @@ test.describe('GanttChart integration', () => {
 
     const nameHeader = page.locator('th:has-text("Name")')
     await expect(nameHeader).toBeVisible()
-    await expect(nameHeader).toHaveCSS('font-weight', '700')
-    await expect(nameHeader).toHaveCSS('font-size', '16px')
+    await expect(nameHeader).toHaveCSS('font-weight', '600')
+    await expect(nameHeader).toHaveCSS('font-size', '13px')
   })
 
   test('toggles row highlight on hover', async ({ page }) => {
