@@ -86,6 +86,7 @@ function normalizeArray<T>(config: T | T[]): T[] {
  */
 class GanttPanel extends Gantt.components.GanttPanel {
   private resizeHandler: (() => void) | undefined;
+  private resizeObserver: ResizeObserver | undefined;
   private initPromise: Promise<GanttComponent[]>;
   private destroyed: boolean = false;
   private initializing: boolean = false;
@@ -136,6 +137,10 @@ class GanttPanel extends Gantt.components.GanttPanel {
   constructor(node: HTMLElement, config: GanttConfiguration) {
     super(node, config);
     this.resizeHandler = () => this.onResize();
+    if (typeof ResizeObserver !== 'undefined' && node) {
+      this.resizeObserver = new ResizeObserver(() => this.onResize());
+      this.resizeObserver.observe(node);
+    }
     this.initPromise = (async () => {
       await Gantt.envReady();
       return this.setConfiguration(config);
@@ -1206,6 +1211,11 @@ class GanttPanel extends Gantt.components.GanttPanel {
     if (this.resizeHandler) {
       window.removeEventListener('resize', this.resizeHandler);
       this.resizeHandler = undefined;
+    }
+
+    if (this.resizeObserver) {
+      this.resizeObserver.disconnect();
+      this.resizeObserver = undefined;
     }
 
     if (this.updates) {
