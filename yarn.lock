@@ -2239,7 +2239,6 @@ __metadata:
     lint-staged: "npm:^8.2.0"
     postcss: "npm:^8.4.49"
     prettier: "npm:^3.3.3"
-    rimraf: "npm:^2.6.3"
     stylelint: "npm:^15.11.0"
     stylelint-config-standard-scss: "npm:^11.1.0"
     stylelint-order: "npm:^6.0.4"
@@ -17018,7 +17017,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rimraf@npm:^2.2.8, rimraf@npm:^2.5.2, rimraf@npm:^2.6.3":
+"rimraf@npm:^2.2.8, rimraf@npm:^2.5.2":
   version: 2.7.1
   resolution: "rimraf@npm:2.7.1"
   dependencies:
