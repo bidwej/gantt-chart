@@ -193,9 +193,9 @@ The [Gantt examples](/examples) illustrate how to configure and use these featur
 ## Gantt packages
 
 The simple Gantt chart example uses the Gantt chart as a Vanilla Javascript component.
-The Gantt library also distributes the Gantt as a React component and a jQuery component.
-For those packages, the configuration of the Gantt is done using the same configuration object.
-Only the bundle files to include and the how the Gantt object is constructed differ.
+The Gantt library also distributes the Gantt as a React component.
+For this package, the configuration of the Gantt is done using the same configuration object.
+Only the bundle files to include and how the Gantt component is rendered differ.
 
 1. The Gantt as a React component
 
@@ -209,48 +209,4 @@ Only the bundle files to include and the how the Gantt object is constructed dif
    const config = { ... }; // Same format as in the simple Gantt example.
 
    ReactDOM.render(<GanttChart config={config} />, document.getElementById('gantt'));
-   ```
-
-2) The Gantt as a jQuery component
-
-   ```html
-   <html>
-     <head>
-       <!-- Datatables.net CSS file -->
-       <!-- See  https://datatables.net/download/index -->
-       <link href="[...]/datatables.net-dt/css/jquery.dataTables.css" rel="stylesheet" />
-
-       <!-- vis CSS file -->
-       <!-- See  http://visjs.org/#download_install -->
-       <link href="[...]/vis/dist/vis.min.css" rel="stylesheet" type="text/css" />
-
-       <!-- Gantt CSS file -->
-       <link href="[...]/dist/css/gantt-jquery.css" rel="stylesheet" type="text/css" />
-     </head>
-     <body>
-       ...
-       <!-- DOM node to contain the Gantt component. -->
-       <div id="gantt"></div>
-       ...
-       <!-- Include jQuery, see https://jquery.com/download/ -->
-       <script src="[...]/jquery/dist/jquery.min.js"></script>
-
-       <!-- Datatables.net JS file -->
-       <!-- See  https://datatables.net/download/index -->
-       <script src="[...]/datatables.net/js/jquery.dataTables.js"></script>
-
-       <!-- vis JS file -->
-       <!-- See  http://visjs.org/#download_install -->
-       <script src="[...]/dist/vis.min.js"></script>
-
-       <!-- Gantt JS bundle file -->
-       <script src="[...]/ibm-gantt-chart-jquery.js"></script>
-       <script>
-         var config = { ... }; // Same format as for the simple Gantt example
-         $(document).ready(function() {
-             $('#gantt').Gantt(config);
-         } );
-       </script>
-     </body>
-   </html>
    ```

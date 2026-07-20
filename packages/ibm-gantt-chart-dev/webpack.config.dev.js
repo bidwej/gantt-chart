@@ -25,9 +25,6 @@ ${dirs.map((dir) => `  <li><a href="${dir}.html">${dir}</a></li>`).join('\n')}
 `;
 
 const commonAlias = {
-  jquery: 'jquery/dist/jquery.js',
-  'datatables.net': 'datatables.net/js/jquery.dataTables.js',
-  'datatables.net-dt$': 'datatables.net-dt',
   vis: 'vis/dist/vis.min.js',
 };
 
@@ -132,12 +129,7 @@ module.exports = {
       VERSION: JSON.stringify(pkg.version),
       REPOSITORY: JSON.stringify((pkg.repository && pkg.repository.url) || pkg.repository),
     }),
-    new webpack.ProvidePlugin({
-      $: 'jquery',
-      jQuery: 'jquery',
-      'window.$': 'jquery',
-      'window.jQuery': 'jquery',
-    }),
+
     new MiniCssExtractPlugin({ filename: '[name].css' }),
     new HtmlWebpackPlugin({
       title: pkg.name,

@@ -16,9 +16,6 @@ module.exports = {
   webpackFinal: async config => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      jquery: 'jquery',
-      'datatables.net': 'datatables.net/js/jquery.dataTables.js',
-      'datatables.net-dt$': 'datatables.net-dt',
       vis: 'vis/dist/vis.min.js',
     };
 
@@ -33,14 +30,7 @@ module.exports = {
       })
     );
 
-    config.plugins.push(
-      new webpack.ProvidePlugin({
-        $: 'jquery',
-        jQuery: 'jquery',
-        'window.$': 'jquery',
-        'window.jQuery': 'jquery',
-      })
-    );
+
 
     const jsRule = config.module.rules.find(rule => rule.test && rule.test.toString().includes('js'));
     if (jsRule) {

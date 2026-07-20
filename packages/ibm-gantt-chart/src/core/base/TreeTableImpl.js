@@ -34,21 +34,42 @@ export default class TreeTableImpl extends TreeTable {
 
     // Create table element
     const tableElt = document.createElement('table');
-    tableElt.className = 'gantt-tree-table dataTables_scrollHead';
+    tableElt.className = 'gantt-tree-table';
     tableElt.style.width = '100%';
-    tableElt.style.height = '100%';
+    tableElt.style.borderCollapse = 'collapse';
+    tableElt.style.fontFamily = 'inherit';
 
     // Create header
     const thead = document.createElement('thead');
     const headerRow = document.createElement('tr');
-    const columns = [{ title: 'Name', renderer: { text: 'name' } }, ...(this.config?.columns || [])];
+    headerRow.style.borderBottom = '1px solid #e0e0e0';
+    headerRow.style.display = 'flex';
+
+    // Columns setup: first is empty title for row numbers, second is Name, rest are custom config columns
+    const columns = [
+      { title: '', width: '40px', isRowNumber: true },
+      { title: 'Name', renderer: { text: 'name' }, isName: true },
+      ...(this.config?.columns || [])
+    ];
+
     columns.forEach((column) => {
       const th = document.createElement('th');
       th.textContent = column.title || '';
-      th.style.padding = '10px';
-      th.style.backgroundColor = '#4CAF50';
-      th.style.color = 'white';
+      th.style.padding = '8px 12px';
+      th.style.backgroundColor = '#f4f4f4';
+      th.style.color = '#161616';
+      th.style.fontWeight = '600';
+      th.style.fontSize = '13px';
+      th.style.textAlign = 'left';
+      th.style.borderRight = '1px solid #e0e0e0';
+      if (column.width) {
+        th.style.width = column.width;
+        th.style.flex = `0 0 ${column.width}`;
+      } else {
+        th.style.flex = '1';
+      }
       if (column.sortComparator) {
+        th.style.cursor = 'pointer';
         th.addEventListener('click', () => this.sortRows(column));
       }
       headerRow.appendChild(th);
@@ -58,46 +79,110 @@ export default class TreeTableImpl extends TreeTable {
 
     // Create body
     this.tableBody = document.createElement('tbody');
-    this.tableBody.className = 'dataTables_scrollBody';
     this.tableBody.style.display = 'block';
     this.tableBody.style.overflowY = 'auto';
-    this.tableBody.style.overflowX = 'auto';
+    this.tableBody.style.overflowX = 'hidden';
     this.tableBody.style.position = 'absolute';
     this.tableBody.style.left = '0';
     this.tableBody.style.right = '0';
     this.tableBody.style.bottom = '0';
-    this.tableBody.style.top = '40px';
+    this.tableBody.style.top = '36px';
 
     // Add rows
+    const renderRowContent = (row, tr) => {
+      // Clear row
+      while (tr.firstChild) {
+        tr.removeChild(tr.firstChild);
+      }
+
+      tr.id = row.id;
+      tr.style.display = 'flex';
+      tr.style.alignItems = 'center';
+      tr.style.borderBottom = '1px solid #e0e0e0';
+      tr.style.height = `${this.config?.rowHeight || 32}px`;
+      tr.style.fontSize = '13px';
+      
+      const isCollapsed = this.collapsedRows.includes(row.id);
+      
+      columns.forEach((column) => {
+        const td = document.createElement('td');
+        td.style.padding = '4px 12px';
+        td.style.display = 'flex';
+        td.style.alignItems = 'center';
+        td.style.overflow = 'hidden';
+        td.style.textOverflow = 'ellipsis';
+        td.style.whiteSpace = 'nowrap';
+        td.style.borderRight = '1px solid #e0e0e0';
+        
+        if (column.width) {
+          td.style.width = column.width;
+          td.style.flex = `0 0 ${column.width}`;
+        } else {
+          td.style.flex = '1';
+        }
+
+        if (column.isRowNumber) {
+          td.textContent = String(row.index + 1);
+          td.style.color = '#8d8d8d';
+          td.style.justifyContent = 'center';
+        } else if (column.isName) {
+          // Tree structure indentation
+          const depth = row.getAncestorsCount ? row.getAncestorsCount() : 0;
+          const indent = document.createElement('div');
+          indent.style.width = `${depth * 16}px`;
+          indent.style.flexShrink = '0';
+          td.appendChild(indent);
+
+          // Caret button if row has children
+          const hasChildren = row.children && row.children.length > 0;
+          const caret = document.createElement('span');
+          caret.style.display = 'inline-block';
+          caret.style.width = '16px';
+          caret.style.cursor = hasChildren ? 'pointer' : 'default';
+          caret.style.marginRight = '4px';
+          caret.style.fontSize = '10px';
+          caret.style.userSelect = 'none';
+          caret.style.color = '#525252';
+          
+          if (hasChildren) {
+            caret.textContent = isCollapsed ? '▶' : '▼';
+            caret.addEventListener('click', (e) => {
+              e.stopPropagation();
+              this.toggleCollapseRow(row);
+            });
+          } else {
+            caret.textContent = '';
+          }
+          td.appendChild(caret);
+
+          // Name label
+          const label = document.createElement('span');
+          label.textContent = row.name ?? '';
+          td.appendChild(label);
+        } else {
+          const field = column.renderer?.text || 'name';
+          const value = typeof field === 'function' ? field(row) : row[field];
+          td.textContent = value ?? '';
+        }
+        tr.appendChild(td);
+      });
+    };
+
     if (rows && rows.length) {
       for (let i = 0; i < rows.length; i++) {
         const row = rows[i];
         row.index = i;
         const tr = document.createElement('tr');
-        tr.id = row.id;
-        tr.style.display = 'block';
-        tr.style.padding = '5px';
-        tr.style.height = `${this.config?.rowHeight || 32}px`;
-        if (i % 2) {
-          tr.style.backgroundColor = '#f2f2f2';
-        }
-
-        columns.forEach((column, columnIndex) => {
-          const td = document.createElement('td');
-          td.style.verticalAlign = 'middle';
-          if (columnIndex === 0) {
-            const indent = document.createElement('div');
-            indent.className = 'hierarchy-control';
-            indent.style.display = 'inline-block';
-            indent.style.width = `${(row.getAncestorsCount ? row.getAncestorsCount() + 1 : 1) * 16}px`;
-            td.appendChild(indent);
-          }
-          const field = column.renderer?.text || 'name';
-          const value = typeof field === 'function' ? field(row) : row[field];
-          td.appendChild(document.createTextNode(value ?? ''));
-          tr.appendChild(td);
-        });
         row.tr = tr;
+        renderRowContent(row, tr);
+        
+        // Zebra striping
+        if (i % 2 === 1) {
+          tr.style.backgroundColor = '#f9f9f9';
+        } else {
+          tr.style.backgroundColor = '#ffffff';
+        }
+        
         this.tableBody.appendChild(tr);
       }
     }
@@ -106,18 +191,42 @@ export default class TreeTableImpl extends TreeTable {
     this.node.appendChild(tableElt);
 
     // Setup click handlers
-    const self = this;
     this.tableBody.addEventListener('click', (e) => {
       const tr = e.target.closest('tr');
       if (tr) {
-        const row = self.getRow(tr.id);
-        if (row) {
-          if (self.gantt.selectionHandler) {
-            self.gantt.selectionHandler.processClick(e, row);
-          }
+        const row = this.getRow(tr.id);
+        if (row && this.gantt.selectionHandler) {
+          this.gantt.selectionHandler.processClick(e, row);
         }
       }
     });
+
+    // Dynamic filter and zebra striping logic
+    this.filterChanged = () => {
+      let visibleIndex = 0;
+      (this.rows || []).forEach((row) => {
+        if (!row.tr) return;
+        const hiddenByCollapse = this.isRowCollapsed(row);
+        const hiddenByFilter = this.isRowFiltered(row);
+        
+        if (hiddenByCollapse || hiddenByFilter) {
+          row.tr.remove();
+        } else {
+          // Update contents (to refresh carets state)
+          renderRowContent(row, row.tr);
+          
+          // Re-apply zebra striping on visible rows
+          if (visibleIndex % 2 === 1) {
+            row.tr.style.backgroundColor = '#f9f9f9';
+          } else {
+            row.tr.style.backgroundColor = '#ffffff';
+          }
+          
+          this.tableBody.appendChild(row.tr);
+          visibleIndex++;
+        }
+      });
+    };
   }
 
   getRow(param) {

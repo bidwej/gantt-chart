@@ -9,7 +9,7 @@ module.exports = {
     },
   },
   extends: ['airbnb', 'plugin:react-hooks/recommended', 'prettier'],
-  env: { mocha: true, jquery: true, browser: true, node: true, es6: true },
+  env: { mocha: true, browser: true, node: true, es6: true },
   globals: { chai: 'readonly', NAME: 'readonly', VERSION: 'readonly' },
   settings: {
     react: { version: 'detect' },
