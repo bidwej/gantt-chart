@@ -133,16 +133,23 @@ function createSelectorFunction(
 
 export default class Renderer extends Gantt.components.Renderer {
   cssGetters?: CSSGetterFunction[];
+
   getCSS?: (object: RenderObject, ctx: RenderContext) => string;
+
   getText?: StringGetterFunction;
+
   getIcon?: StringGetterFunction;
+
   background?: ColorGetterFunction;
+
   color?: ColorGetterFunction;
+
   colors?: string[];
+
   textColors?: string[];
+
   drawDefaultContent?: (elt: HTMLElement, icon: string | undefined, text: string | undefined, object: RenderObject, ctx: RenderContext) => void;
-  getTooltipProperties?: TooltipPropertiesFunction;
-  getTooltip?: (parentNode: HTMLElement, obj: RenderObject, ctx: RenderContext) => void;
+
 
   constructor(config: RendererConfiguration | RendererConfiguration[], proto: Record<string, unknown> | null, paletteHandler: PaletteHandler) {
     super(config, proto, paletteHandler);
@@ -502,9 +509,7 @@ export default class Renderer extends Gantt.components.Renderer {
         return oldDraw.call(this, object, elt, ctx);
       };
     } else {
-      this.draw = (object: RenderObject, elt: HTMLElement | null, ctx: RenderContext): HTMLElement | null => {
-        return config.draw(object, elt || document.createElement('div'), ctx);
-      };
+      this.draw = (object: RenderObject, elt: HTMLElement | null, ctx: RenderContext): HTMLElement | null => config.draw(object, elt || document.createElement('div'), ctx);
     }
   }
 
@@ -752,9 +757,7 @@ export default class Renderer extends Gantt.components.Renderer {
 
   initialized(config: RendererConfiguration | RendererConfiguration[] | null): void {}
 
-  getTooltipProperties = (obj: RenderObject, ctx: RenderContext): (string | number | boolean)[] => {
-    return [];
-  };
+  getTooltipProperties = (obj: RenderObject, ctx: RenderContext): (string | number | boolean)[] => [];
 
   getTooltip = (parentNode: HTMLElement, obj: RenderObject, ctx: RenderContext): void => {
     parentNode.style.display = 'flex';

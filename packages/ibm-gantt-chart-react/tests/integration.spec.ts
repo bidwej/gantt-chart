@@ -82,4 +82,21 @@ test.describe('GanttChart integration', () => {
     const tableScrollTop = await page.locator('.gantt-tree-table tbody').evaluate(el => el.scrollTop)
     expect(tableScrollTop).toBe(50)
   })
+
+  test('reacts to container resizing via ResizeObserver', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForSelector('.ibm-gantt-chart-react', { state: 'visible', timeout: 10000 })
+
+    const scroller = page.locator('.time-table-scroller')
+    const initialWidth = await scroller.evaluate(el => el.clientWidth)
+
+    // Resize container width to force layout updates
+    await page.locator('.ibm-gantt-chart-react').evaluate(el => {
+      el.style.width = '300px';
+    })
+    await page.waitForTimeout(500)
+
+    const finalWidth = await scroller.evaluate(el => el.clientWidth)
+    expect(finalWidth).toBeLessThan(initialWidth)
+  })
 })

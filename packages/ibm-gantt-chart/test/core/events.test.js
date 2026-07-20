@@ -1,4 +1,4 @@
-/* eslint-disable */
+ 
 describe('Event Handling', () => {
   it('should trigger selection events on row click', () => {
     const memModel = createResourceWidthActivitiesData();

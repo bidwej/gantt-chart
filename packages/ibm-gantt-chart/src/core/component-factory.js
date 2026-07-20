@@ -12,7 +12,11 @@
  * - Clear API contract (no magic properties)
  */
 
-import Gantt from './core';
+let componentsRegistry = null;
+
+export function registerComponents(components) {
+  componentsRegistry = components;
+}
 
 /**
  * Get the component class, preferring .impl if available
@@ -25,7 +29,7 @@ export function getComponent(componentName, BaseComponent) {
     return BaseComponent;
   }
 
-  const components = Gantt.components;
+  const components = componentsRegistry || (typeof window !== 'undefined' && window.Gantt && window.Gantt.components);
   if (!components || !components[componentName]) {
     return BaseComponent;
   }
@@ -73,7 +77,7 @@ export function createComponent(componentName, BaseComponent, ...args) {
  * Useful for conditional logic based on available implementations
  */
 export function hasCustomImpl(componentName) {
-  const components = Gantt.components;
+  const components = componentsRegistry || (typeof window !== 'undefined' && window.Gantt && window.Gantt.components);
   return components && components[componentName] && typeof components[componentName].impl === 'function';
 }
 
@@ -82,4 +86,5 @@ export default {
   getComponents,
   createComponent,
   hasCustomImpl,
+  registerComponents,
 };

@@ -86,52 +86,99 @@ function normalizeArray<T>(config: T | T[]): T[] {
  */
 class GanttPanel extends Gantt.components.GanttPanel {
   private resizeHandler: (() => void) | undefined;
+
   private resizeObserver: ResizeObserver | undefined;
+
   private initPromise: Promise<GanttComponent[]>;
+
   private destroyed: boolean = false;
+
   private initializing: boolean = false;
+
   private _ready: boolean = false;
+
   config: GanttConfiguration = {};
+
   private rowHeight: number = 0;
+
   private zoomFactor: number = 0;
+
   private tooltip: GanttComponent | null = null;
+
   private title: string | null = null;
+
   private rowFilter: GanttComponent | null = null;
+
   private activityFilter: GanttComponent | null = null;
+
   private selectionHandler: GanttComponent | null = null;
+
   private type: string | null = null;
+
   private errorHandler: GanttComponent | null = null;
+
   private updates: GanttComponent | null = null;
+
   private model: GanttComponent | null = null;
+
   private splitPane: GanttComponent | null = null;
+
   private loadChartSplit: GanttComponent | null = null;
+
   private loadChartCtrl: LoadResourceChartCtrl | null = null;
+
   private contentElt: HTMLElement | null = null;
+
   private body: HTMLElement | null = null;
+
   private toolbars: GanttComponent[] | null = null;
+
   private toolbarElt: HTMLElement | null = null;
+
   private headerElt: HTMLElement | null = null;
+
   private legendConfig: GanttConfiguration | undefined;
+
   private tablePanel: HTMLElement | null = null;
+
   private table: GanttComponent | null = null;
+
   private timePanel: HTMLElement | null = null;
+
   private timeLineScroller: HTMLElement | null = null;
+
   private timeTablePanel: HTMLElement | null = null;
+
   private timeTable: GanttComponent | null = null;
+
   private updateTimeLineRightMargin: (() => void) | undefined;
+
   private updateTableHeaderHeight: ((force?: boolean) => void) | undefined;
+
   private headersHeight: number = 0;
+
   private timeLineInit: Promise<TimeWindow> | null = null;
+
   private loadCharts: GanttComponent[] | null = null;
+
   private loadResPanel: HTMLElement | null | undefined = null;
+
   private timeLine: GanttComponent | null = null;
+
   private loadingPanel: HTMLElement | null | undefined = null;
+
   private loading: boolean = false;
+
   private timeWindow: TimeWindow | undefined;
+
   private _resourceGantt: boolean = false;
+
   private searchFilter: GanttConfiguration | null = null;
+
   private hideEmptyRowsFilter: GanttConfiguration | null = null;
+
   private loadOnDemand: boolean = false;
+
   private loadChartHidden: boolean = false;
 
   constructor(node: HTMLElement, config: GanttConfiguration) {
@@ -713,7 +760,7 @@ class GanttPanel extends Gantt.components.GanttPanel {
     Gantt.utils.addWheelListener(tablePanel, ((evt: WheelEvent) => {
       const factor = evt.deltaMode === DOM_DELTA_LINE ? WHEEL_LINE_DELTA_FACTOR : WHEEL_PIXEL_DELTA_FACTOR;
       const delta = factor * evt.deltaY;
-      (this.timeTable as Record<string, (y: number) => void>).scrollToY?.((this.timeTable as Record<string, () => number>).getScrollTop?.() + delta);
+      (this.timeTable as Record<string, (y: number) => void>).scrollToY?.(((this.timeTable as Record<string, () => number>).getScrollTop?.() ?? 0) + delta);
       evt.preventDefault();
     }) as EventListener);
     return tablePanel;
@@ -1540,6 +1587,7 @@ class GanttPanel extends Gantt.components.GanttPanel {
   }
 
   private palettes: Record<string, GanttComponent> | null = null;
+
   private defaultPalette: GanttComponent | null = null;
 
   startUpdating(): void {

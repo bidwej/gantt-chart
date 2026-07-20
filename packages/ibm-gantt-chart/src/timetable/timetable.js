@@ -19,7 +19,7 @@ import {
 } from './css-classes';
 
 import './activitylayout';
-import '../constraintgraph';
+
 import './timetable.scss';
 
 const ROW_ID_PREFIX = 'timeTableRow_';

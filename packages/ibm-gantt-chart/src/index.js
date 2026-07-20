@@ -17,8 +17,8 @@ if (typeof globalThis !== 'undefined') {
 }
 
 // Handle webpack DefinePlugin variables - they may come from globalThis in test environments
-let ver = typeof globalThis !== 'undefined' && globalThis.VERSION ? globalThis.VERSION : 'dev';
-let name = typeof globalThis !== 'undefined' && globalThis.NAME ? globalThis.NAME : 'ibm-gantt-chart';
+const ver = typeof globalThis !== 'undefined' && globalThis.VERSION ? globalThis.VERSION : 'dev';
+const name = typeof globalThis !== 'undefined' && globalThis.NAME ? globalThis.NAME : 'ibm-gantt-chart';
 
 Gantt.version = ver;
 

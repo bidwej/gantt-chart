@@ -1,4 +1,4 @@
-import { getComponent } from './component-factory';
+import { getComponent, registerComponents } from './component-factory';
 
 import ActivityLayout from './base/ActivityLayout';
 import Button from './base/Button';
@@ -155,6 +155,7 @@ Gantt.components = {
 
 // Register default implementations
 Gantt.components.TreeTable.impl = TreeTableImpl;
+registerComponents(Gantt.components);
 
 Gantt.envReady = function envReady() {
   return Promise.resolve(true);

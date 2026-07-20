@@ -86,20 +86,33 @@ function updateTimeWindow<T extends TimeBoundedNode>(wnd: TimeWindow, activity: 
 
 export default class GanttModel extends Gantt.components.GanttModel {
   private dateParser: DateParser | null = null;
+
   private allFetcher: DataFetcherInternal | null = null;
+
   private resourceFetcher: DataFetcherInternal | null = null;
+
   private activityFetcher: DataFetcherInternal | null = null;
+
   private reservationFetcher: DataFetcherInternal | null = null;
+
   private constraintFetcher: DataFetcherInternal | null = null;
+
   private timeWindowFetcher: DataFetcherInternal | null = null;
 
   private allData: unknown = null;
+
   activities: DataArray<ActivityNode> = Object.assign([], { byIds: {} });
+
   resources: DataArray<ResourceNode> = Object.assign([], { byIds: {} });
+
   constraints: DataArray<ConstraintNode> = Object.assign([], { byIds: {} });
+
   reservations: DataArray<Reservation> = Object.assign([], { byIds: {} });
+
   rows: DataArray<Row> = Object.assign([], { byIds: {} });
+
   timeWindow: TimeWindow | null = null;
+
   private flat: boolean = true;
 
   private gantt: unknown;

@@ -210,8 +210,10 @@
   }
 }
 
+/* stylelint-disable selector-class-pattern */
 .gantt-panel.activity-chart .time-table-activity,
 .gantt-panel.activity_chart .time-table-activity {
+/* stylelint-enable selector-class-pattern */
   color: $black5;
 
   .text-container {
