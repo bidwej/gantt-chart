@@ -23,4 +23,40 @@ test.describe('GanttChart integration', () => {
     // .gantt-panel is the root element the core library appends on construction
     await expect(page.locator('.ibm-gantt-chart-react .gantt-panel')).toBeVisible({ timeout: 10000 })
   })
+
+  test('supports multiple row selection via Ctrl-click', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForSelector('.ibm-gantt-chart-react', { state: 'visible', timeout: 10000 })
+
+    const rowAnne = page.locator('tr[id="NURSES+Anne"]')
+    const rowBethanie = page.locator('tr[id="NURSES+Bethanie"]')
+
+    // Click first row
+    await rowAnne.click()
+    await expect(rowAnne).toHaveClass(/selected/)
+
+    // Ctrl-click second row
+    await rowBethanie.click({ modifiers: ['Control'] })
+    await expect(rowAnne).toHaveClass(/selected/)
+    await expect(rowBethanie).toHaveClass(/selected/)
+  })
+
+  test('renders text styling and table header presence correctly', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForSelector('.ibm-gantt-chart-react', { state: 'visible', timeout: 10000 })
+
+    const nameHeader = page.locator('th:has-text("Name")')
+    await expect(nameHeader).toBeVisible()
+    await expect(nameHeader).toHaveCSS('font-weight', '700')
+    await expect(nameHeader).toHaveCSS('font-size', '16px')
+  })
+
+  test('toggles row highlight on hover', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForSelector('.ibm-gantt-chart-react', { state: 'visible', timeout: 10000 })
+
+    const timeRow = page.locator('.time-table-row').first()
+    await timeRow.hover()
+    await expect(timeRow).toHaveClass(/highlight/)
+  })
 })

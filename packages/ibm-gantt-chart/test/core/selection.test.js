@@ -180,4 +180,48 @@ describe('Selection', () => {
       }
     );
   });
+
+  it('Test multiple row selection', function testMultipleRowSelection() {
+    const memModel = createResourceWidthActivitiesData();
+    return createGantt({ data: memModel }).then((gantt) => {
+      const test = new GanttTest(gantt);
+      test.clickRow(1);
+      expect(test.isRowSelected(1)).to.be.true;
+      
+      // Simulate Ctrl-click to select multiple rows
+      test.clickRow(2, true);
+      expect(test.isRowSelected(1)).to.be.true;
+      expect(test.isRowSelected(2)).to.be.true;
+      
+      // Click without Ctrl to clear others and select only row 3
+      test.clickRow(3);
+      expect(test.isRowSelected(1)).to.be.false;
+      expect(test.isRowSelected(2)).to.be.false;
+      expect(test.isRowSelected(3)).to.be.true;
+    });
+  });
+
+  it('Test programmatic row and activity highlighting', function testHighlighting() {
+    const memModel = createResourceWidthActivitiesData({
+      getActivityCount(id, rowNum) {
+        return 3;
+      }
+    });
+    return createGantt({ data: memModel }).then((gantt) => {
+      const row = gantt.getRow(1);
+      gantt.highlightRow(row, true);
+      expect(row.tr.classList.contains('selected')).to.be.true;
+
+      gantt.highlightRow(row, false);
+      expect(row.tr.classList.contains('selected')).to.be.false;
+
+      const act = gantt.getActivity(0, 1);
+      const actNode = act.node;
+      gantt.timeTable.highlightActivity(actNode, true);
+      expect(actNode.classList.contains('highlight')).to.be.true;
+
+      gantt.timeTable.highlightActivity(actNode, false);
+      expect(actNode.classList.contains('highlight')).to.be.false;
+    });
+  });
 });
