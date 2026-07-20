@@ -32,7 +32,7 @@
     "build": "vite build",
     "dev": "vite --port 3002",
     "preview": "vite preview --port 3002",
-    "storybook": "storybook dev --port 9001",
+    "storybook": "storybook dev --port 9002",
     "build:storybook": "storybook build",
     "test": "vitest run",
     "test:dom": "playwright test"
