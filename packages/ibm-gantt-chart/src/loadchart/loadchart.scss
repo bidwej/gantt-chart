@@ -1,4 +1,4 @@
-@import '../core/colors';
+@use '../core/colors' as *;
 
 .load-resource-chart {
   background-color: white;

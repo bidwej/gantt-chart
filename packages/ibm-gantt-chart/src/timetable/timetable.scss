@@ -1,5 +1,5 @@
-@import '../core/core';
-@import '../core/colors';
+@use '../core/core' as *;
+@use '../core/colors' as *;
 
 .gantt-panel .time-panel {
   // .time-table {

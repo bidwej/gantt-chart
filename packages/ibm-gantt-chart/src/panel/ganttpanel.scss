@@ -1,4 +1,4 @@
-@import '../core/colors';
+@use '../core/colors' as *;
 
 .gantt-panel {
   box-sizing: border-box;

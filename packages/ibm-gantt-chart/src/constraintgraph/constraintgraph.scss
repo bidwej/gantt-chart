@@ -1,4 +1,4 @@
-@import '../core/colors';
+@use '../core/colors' as *;
 
 .constraint-link {
   color: $link-color;
