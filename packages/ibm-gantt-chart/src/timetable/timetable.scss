@@ -210,8 +210,9 @@
   }
 }
 
-.gantt-panel.activity-chart .time-table-activity {
-  color: $activity-background;
+.gantt-panel.activity-chart .time-table-activity,
+.gantt-panel.activity_chart .time-table-activity {
+  color: $black5;
 
   .text-container {
     display: table;
