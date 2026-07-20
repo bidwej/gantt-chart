@@ -80,7 +80,7 @@ export default class TreeTableImpl extends TreeTable {
     // Create body
     this.tableBody = document.createElement('tbody');
     this.tableBody.style.display = 'block';
-    this.tableBody.style.overflowY = 'auto';
+    this.tableBody.style.overflowY = 'hidden';
     this.tableBody.style.overflowX = 'hidden';
     this.tableBody.style.position = 'absolute';
     this.tableBody.style.left = '0';
@@ -126,6 +126,7 @@ export default class TreeTableImpl extends TreeTable {
           td.style.color = '#8d8d8d';
           td.style.justifyContent = 'center';
         } else if (column.isName) {
+          td.className = 'hierarchy-control';
           // Tree structure indentation
           const depth = row.getAncestorsCount ? row.getAncestorsCount() : 0;
           const indent = document.createElement('div');

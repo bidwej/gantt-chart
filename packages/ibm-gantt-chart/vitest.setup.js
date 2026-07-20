@@ -570,7 +570,7 @@ GanttTest.prototype = {
     }
   },
   findColumn(name) {
-    const cols = this.gantt.node.querySelectorAll('.dataTables_scrollHead th');
+    const cols = this.gantt.node.querySelectorAll('.gantt-tree-table th, thead th');
     let colTitle;
     for (let iCol = 0; iCol < cols.length; iCol++) {
       const headerCell = cols[iCol];
@@ -588,15 +588,17 @@ GanttTest.prototype = {
     const col = this.findColumn(name);
     expect(col).to.exist;
     const x = col.offsetLeft;
-    const scrollBody = this.gantt.node.querySelector('.table-panel .dataTables_scrollBody');
-    const scrollHead = this.gantt.node.querySelector('.table-panel .dataTables_scrollHead');
-    const left = scrollBody.scrollLeft;
-    if (left > x) {
-      scrollBody.scrollLeft = x;
-      scrollHead.scrollLeft = x;
-    } else if (left + scrollBody.offsetWidth < x) {
-      scrollBody.scrollLeft = x;
-      scrollHead.scrollLeft = x;
+    const scrollBody = this.gantt.node.querySelector('.table-panel tbody') || this.gantt.node.querySelector('.table-panel');
+    const scrollHead = this.gantt.node.querySelector('.table-panel thead') || this.gantt.node.querySelector('.table-panel');
+    const left = scrollBody ? scrollBody.scrollLeft : 0;
+    if (scrollBody && scrollHead) {
+      if (left > x) {
+        scrollBody.scrollLeft = x;
+        scrollHead.scrollLeft = x;
+      } else if (left + scrollBody.offsetWidth < x) {
+        scrollBody.scrollLeft = x;
+        scrollHead.scrollLeft = x;
+      }
     }
   },
   sortColumn(name) {
