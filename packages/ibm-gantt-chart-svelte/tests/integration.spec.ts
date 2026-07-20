@@ -59,4 +59,27 @@ test.describe('GanttChart integration', () => {
     await timeRow.hover()
     await expect(timeRow).toHaveClass(/highlight/)
   })
+
+  test('synchronizes vertical scroll (vscroll) from timetable scroller to table body', async ({ page }) => {
+    await page.goto('/')
+    await page.waitForSelector('.ibm-gantt-chart-svelte', { state: 'visible', timeout: 10000 })
+
+    // Resize container to force vertical scrollbar/overflow
+    await page.locator('.ibm-gantt-chart-svelte').evaluate(el => {
+      el.style.height = '100px';
+    })
+    await page.waitForTimeout(500)
+
+    // Scroll timetable scroller programmatically
+    const scroller = page.locator('.time-table-scroller')
+    await scroller.evaluate(el => {
+      el.scrollTop = 50;
+    })
+    await scroller.dispatchEvent('scroll')
+    await page.waitForTimeout(500)
+
+    // Assert that table body's scrollTop matches the scroll position
+    const tableScrollTop = await page.locator('.gantt-tree-table tbody').evaluate(el => el.scrollTop)
+    expect(tableScrollTop).toBe(50)
+  })
 })
