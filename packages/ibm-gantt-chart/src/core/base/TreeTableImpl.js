@@ -1,3 +1,23 @@
+/**
+ * TreeTableImpl - Custom Vanilla JS Tree Grid implementation.
+ *
+ * ARCHITECTURAL DESIGN DECISIONS:
+ * Why a custom table instead of standard IBM Carbon Components (React/Svelte DataTable)?
+ *
+ * 1. Framework Agnosticism: The core 'ibm-gantt-chart' package is written in pure vanilla JS/TS
+ *    so it can be shared between Svelte and React wrapper packages. Standard Carbon Table components
+ *    are framework-specific and cannot be shared natively.
+ * 2. Scroll Synchronization: A Gantt chart requires absolute, pixel-perfect vertical scroll syncing
+ *    between the left-side tree table and the right-side timeline panel. A custom DOM implementation
+ *    gives us the low-level DOM control and event hook access necessary to achieve lag-free sync.
+ * 3. Rendering Performance: Gantt charts often load thousands of rows. Bypassing React/Svelte
+ *    Virtual DOM and component lifecycles for high-frequency scrolling and node toggles by directly
+ *    manipulating DOM nodes is significantly faster and prevents rendering lags.
+ * 4. Lightweight Tree Support: Native Carbon DataTables do not support nested hierarchical trees out
+ *    of the box. Implementing tree expansion, collapsible parents, and indentation in 469 lines of
+ *    vanilla JS is lightweight and self-contained.
+ */
+
 import TreeTable from './TreeTable';
 import Gantt from '../core';
 
